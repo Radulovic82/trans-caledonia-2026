@@ -133,6 +133,7 @@
     <div class="hero-actions">
       <a class="btn" id="collection-link" href="#" target="_blank" rel="noopener">Open the komoot collection</a>
       <a class="btn ghost" id="site-link" href="#" target="_blank" rel="noopener">trans-caledonia.com</a>
+      <a class="btn ghost" id="packing-link" href="#" target="_blank" rel="noopener">Packing checklist</a>
     </div>
   </header>
 
@@ -151,7 +152,8 @@
     <details>
       <summary>Key information and mandatory kit</summary>
       <ul class="essentials" id="essentials-list"></ul>
-      <p class="small">Full details, rule book and kit list: <a href="https://www.trans-caledonia.com/event-admin-and-information" target="_blank" rel="noopener">Event Admin &amp; Information</a>.</p>
+      <p class="small">Full details, rule book and kit list: <a href="https://www.trans-caledonia.com/event-admin-and-information" target="_blank" rel="noopener">Event Admin &amp; Information</a>.
+        <span id="packing-note"> Our own <a id="packing-link-2" href="#" target="_blank" rel="noopener">packing checklist</a> is on Google Keep.</span></p>
     </details>
   </section>
 
@@ -266,6 +268,10 @@
   document.getElementById("collection-link").href = collection.url;
   const site = document.getElementById("site-link");
   if (collection.site) site.href = collection.site; else site.remove();
+  const packing = document.getElementById("packing-link");
+  const packing2 = document.getElementById("packing-link-2");
+  if (collection.packingList) { packing.href = collection.packingList; packing2.href = collection.packingList; }
+  else { packing.remove(); document.getElementById("packing-note").remove(); }
   const km = stages.reduce((a, s) => a + s.distanceKm, 0);
   const up = stages.reduce((a, s) => a + s.elevationM, 0);
   const timedCount = stages.reduce((a, s) => a + s.timed.length, 0);

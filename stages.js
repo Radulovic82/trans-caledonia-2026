@@ -17,6 +17,7 @@ globalThis.COLLECTION = {
   tagline: "Six days. Thirty-nine timed stages. Royal Deeside, the Cairngorms and Highlands, Perthshire and the Tweed Valley.",
   url: "https://www.komoot.com/collection/4330978/-trans-caledonia-2026",
   site: "https://www.trans-caledonia.com",
+  packingList: "https://keep.google.com/#LIST/1HYXOKSz-TCYwKmiMcBbFJ2JJB6Q2ErUGsXY8Ox9i_Gv6GgqEqluMVhH5zCGY-c4",
   videos: [
     { id: "nU8rb7Zkk94", title: "Trans Caledonia 2026 - Where we're going!", note: "Official event preview" },
     { id: "kKUOxs3YtEM", title: "Trans Caledonia - 1 Minute From Our 6-Day Recce", note: "Official recce footage" },
