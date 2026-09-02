@@ -19,10 +19,10 @@ globalThis.COLLECTION = {
   site: "https://www.trans-caledonia.com",
   // Packing checklist. Ticks are remembered in the viewer's own browser only.
   packing: [
-    { group: "Bike", items: ["Bike", "Garmin Edge", "AXS charger", "Fidlock bottle", "OneUp pump", "2x spare brake pads", "Spare chain", "Spare cleats", "Zip ties", "Squirt chain lube", "Rag for cleaning the bike"] },
+    { group: "Bike", items: ["Bike", "Garmin Edge", "AXS charger", "Fidlock bottle", "OneUp pump", "2x spare brake pads", "Spare chain", "Spare cleats", "Tubeless plugs", "Zip ties", "Squirt chain lube", "Rag for cleaning the bike"] },
     { group: "Riding kit", items: ["Helmet", "Body armour", "Knee pads", "Goggles", "Sunglasses", "3x gloves", "2x bike shoes", "Rain jacket", "Gilet", "Hip pack + bladder", "Rucksack + bladder"] },
     { group: "Clothes", items: ["6x sets of clothes", "Casual clothes", "Hat and cap", "Flip flops"] },
-    { group: "Food and health", items: ["Carb powder", "Salty and caffeine chocolate bars", "Gummy worms", "Kafetin (painkillers)", "Voltaren gel"] },
+    { group: "Food and health", items: ["Nduranz Unit drink powder", "Salty and caffeine chocolate bars", "Kafetin (painkillers)", "Voltaren gel"] },
     { group: "Electronics", items: ["GoPro, batteries, charger", "Phone charger", "Powerbank", "Headphones"] },
     { group: "Toiletries", items: ["Toothbrush + toothpaste", "Shampoo"] },
     { group: "Documents and misc", items: ["Passport", "NLU stickers"] },
