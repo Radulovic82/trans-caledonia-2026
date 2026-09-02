@@ -113,6 +113,15 @@
   details summary { cursor: pointer; font-weight: 600; }
 
   footer { color: var(--muted); font-size: 13px; margin-top: 40px; }
+
+  #to-top {
+    position: fixed; right: 18px; bottom: 18px; z-index: 10; width: 44px; height: 44px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; font-size: 20px; line-height: 1;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18); opacity: 0; pointer-events: none; transform: translateY(8px);
+    transition: opacity .2s, transform .2s;
+  }
+  #to-top.show { opacity: 1; pointer-events: auto; transform: none; }
+  #to-top:hover { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -156,6 +165,8 @@
     Missing a good video? <a href="https://github.com/Radulovic82/trans-caledonia-2026">Add it on GitHub</a>.
   </footer>
 </div>
+
+<button id="to-top" type="button" aria-label="Back to top" title="Back to top">&uarr;</button>
 
 <script src="stages.js"></script>
 <script>
@@ -288,6 +299,13 @@
     const ul = document.getElementById("essentials-list");
     for (const e of collection.essentials) ul.appendChild(el("li", { text: e }));
   } else document.getElementById("essentials").remove();
+
+  // Back to top
+  const toTop = document.getElementById("to-top");
+  const toggleToTop = () => toTop.classList.toggle("show", window.scrollY > 600);
+  window.addEventListener("scroll", toggleToTop, { passive: true });
+  toggleToTop();
+  toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
   // Nav + stages
   const nav = document.getElementById("nav");
