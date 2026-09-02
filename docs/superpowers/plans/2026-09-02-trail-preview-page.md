@@ -39,7 +39,7 @@ Note: `file://` pages can load a sibling classic script tag, so `stages.js` as a
 **Interfaces:**
 - Produces: `globalThis.STAGES: Array<{day:string, name:string, komootId:string, distanceKm:number, elevationM:number, duration:string, searchQuery:string, videos:Array<{id:string, title:string, note?:string}>}>`
 
-- [ ] **Step 1: Research videos.** For each stage, run YouTube searches (WebSearch / WebFetch on `https://www.youtube.com/results?search_query=...`) for the trail centres and named trails on the route. Candidate queries:
+- [x] **Step 1: Research videos.** For each stage, run YouTube searches (WebSearch / WebFetch on `https://www.youtube.com/results?search_query=...`) for the trail centres and named trails on the route. Candidate queries:
   - 1.1 Ballater: "Ballater mountain bike", "Cambus o' May MTB", "Deeside trails Ballater"
   - 1.2 Aboyne: "Aboyne mountain bike trails", "Aboyne Bike Park"
   - 1.3 Scolty: "Scolty Hill mountain bike", "Scolty trails Banchory"
@@ -51,7 +51,7 @@ Note: `file://` pages can load a sibling classic script tag, so `stages.js` as a
   - 6 Golfie Glentress: "Golfie Innerleithen", "Glentress red route", "Glentress black"
   Pick 2 to 4 per stage that show riding on the trails. Record the 11-character video ID and title.
 
-- [ ] **Step 2: Write `stages.js`** with this shape, filled with the researched IDs:
+- [x] **Step 2: Write `stages.js`** with this shape, filled with the researched IDs:
 
 ```js
 // Stage data for the Trans Caledonia 2026 preview page.
@@ -79,7 +79,7 @@ globalThis.STAGES = [
 ];
 ```
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add stages.js
@@ -96,7 +96,7 @@ git commit -m "Add stage data with curated trail videos"
 **Interfaces:**
 - Consumes: `globalThis.STAGES` from `stages.js`.
 
-- [ ] **Step 1: Write the script**
+- [x] **Step 1: Write the script**
 
 ```js
 // Verifies every YouTube video ID and komoot tour ID in stages.js.
@@ -118,9 +118,9 @@ console.log(failures ? `${failures} failure(s)` : "all good");
 process.exit(failures ? 1 : 0);
 ```
 
-- [ ] **Step 2: Run it.** `node scripts/check-videos.mjs`. Expected: `all good`, exit 0. Fix or drop any failing IDs in `stages.js`.
+- [x] **Step 2: Run it.** `node scripts/check-videos.mjs`. Expected: `all good`, exit 0. Fix or drop any failing IDs in `stages.js`.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add scripts/check-videos.mjs stages.js
@@ -137,7 +137,7 @@ git commit -m "Add video and tour verification script"
 **Interfaces:**
 - Consumes: `globalThis.STAGES` via `<script src="stages.js">`.
 
-- [ ] **Step 1: Write `index.html`.** Requirements the implementation must meet:
+- [x] **Step 1: Write `index.html`.** Requirements the implementation must meet:
   - `<title>Trans Caledonia 2026 trail previews</title>`, viewport meta.
   - Header: h1 "Trans Caledonia 2026", subtitle "Trail previews for all nine stages", link to `https://www.komoot.com/collection/4330978/-trans-caledonia-2026`, computed totals (sum of distanceKm and elevationM).
   - For each stage, a `<section class="stage" id="stage-<day with dot replaced by dash>">` containing:
@@ -151,11 +151,11 @@ git commit -m "Add video and tour verification script"
   - CSS: system font stack, max-width 1100px, cards with light border and radius, videos grid `repeat(auto-fill, minmax(260px, 1fr))`, dark-mode via `prefers-color-scheme`.
   - Rendering built with DOM APIs or a template string; escape titles with `textContent`, never innerHTML with raw data.
 
-- [ ] **Step 2: Verify from disk.** `open index.html`. Check: 9 cards, komoot maps load, clicking a thumbnail plays the video, no console errors.
+- [x] **Step 2: Verify from disk.** `open index.html`. Check: 9 cards, komoot maps load, clicking a thumbnail plays the video, no console errors.
 
-- [ ] **Step 3: Verify at phone width.** Resize the window to ~390px wide. Nav wraps, one column, video tiles stack.
+- [x] **Step 3: Verify at phone width.** Resize the window to ~390px wide. Nav wraps, one column, video tiles stack.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add index.html
@@ -169,25 +169,25 @@ git commit -m "Add trail preview page"
 **Files:**
 - Create: `README.md`
 
-- [ ] **Step 1: Write README.md** covering: what the page is, the live link `https://radulovic82.github.io/trans-caledonia-2026/`, the komoot collection link, how to add a video (edit `stages.js`, run `node scripts/check-videos.mjs`, open a PR), and a "Coverage notes" section listing stages with thin or no footage.
+- [x] **Step 1: Write README.md** covering: what the page is, the live link `https://radulovic82.github.io/trans-caledonia-2026/`, the komoot collection link, how to add a video (edit `stages.js`, run `node scripts/check-videos.mjs`, open a PR), and a "Coverage notes" section listing stages with thin or no footage.
 
-- [ ] **Step 2: Create the public repo and push**
+- [x] **Step 2: Create the public repo and push**
 
 ```bash
 gh repo create Radulovic82/trans-caledonia-2026 --public --source=. --remote=origin \
   --description "Trail preview page for the Trans Caledonia 2026 stages" --push
 ```
 
-- [ ] **Step 3: Enable Pages from main root**
+- [x] **Step 3: Enable Pages from main root**
 
 ```bash
 gh api -X POST repos/Radulovic82/trans-caledonia-2026/pages \
   -f 'source[branch]=main' -f 'source[path]=/'
 ```
 
-- [ ] **Step 4: Verify the live page.** Poll `curl -sI https://radulovic82.github.io/trans-caledonia-2026/ | head -1` until `200`, then open it in the browser and repeat the Task 3 checks.
+- [x] **Step 4: Verify the live page.** Poll `curl -sI https://radulovic82.github.io/trans-caledonia-2026/ | head -1` until `200`, then open it in the browser and repeat the Task 3 checks.
 
-- [ ] **Step 5: Commit README** (before push if written first; otherwise push again)
+- [x] **Step 5: Commit README** (before push if written first; otherwise push again)
 
 ```bash
 git add README.md && git commit -m "Add README" && git push
