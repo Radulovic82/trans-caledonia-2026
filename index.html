@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trans Caledonia 2026 trail previews</title>
+<meta name="description" content="Route maps and YouTube trail videos for all nine stages of Trans Caledonia 2026.">
+<style>
+  :root {
+    --bg: #f6f5f1; --card: #ffffff; --text: #1d1d1b; --muted: #6b6a66;
+    --line: #e2e0da; --accent: #c8501e; --accent-text: #ffffff; --chip: #eeece6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141413; --card: #1f1f1d; --text: #ece9e2; --muted: #a09d95;
+      --line: #33322f; --accent: #f0703a; --accent-text: #141413; --chip: #2a2926;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 16px 64px; }
+
+  header.hero { padding: 40px 0 16px; }
+  header.hero h1 { margin: 0 0 4px; font-size: clamp(28px, 5vw, 44px); letter-spacing: -0.02em; }
+  header.hero p.sub { margin: 0 0 12px; color: var(--muted); font-size: 18px; }
+  .totals { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .chip { background: var(--chip); border-radius: 999px; padding: 4px 12px; font-size: 14px; }
+  .btn {
+    display: inline-block; background: var(--accent); color: var(--accent-text); text-decoration: none;
+    padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 14px;
+  }
+  .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+
+  nav.stages {
+    position: sticky; top: 0; z-index: 5; background: var(--bg);
+    border-bottom: 1px solid var(--line); padding: 8px 0; margin: 8px 0 24px;
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  nav.stages a {
+    text-decoration: none; font-size: 13px; padding: 4px 10px; border-radius: 999px;
+    background: var(--chip); white-space: nowrap;
+  }
+  nav.stages a:hover { background: var(--accent); color: var(--accent-text); }
+
+  section.stage, section.event {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 20px; margin-bottom: 28px; scroll-margin-top: 64px;
+  }
+  .stage-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; margin-bottom: 4px; }
+  .stage-head h2 { margin: 0; font-size: 24px; }
+  .stage-head h2 a { text-decoration: none; }
+  .stage-head h2 a:hover { text-decoration: underline; }
+  .stage-head .day { color: var(--accent); font-weight: 700; margin-right: 6px; }
+  .stats { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+
+  iframe.map { width: 100%; height: 420px; border: 0; border-radius: 10px; background: var(--chip); }
+  @media (max-width: 600px) { iframe.map { height: 340px; } }
+
+  h3 { margin: 20px 0 10px; font-size: 15px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+  .videos { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .video {
+    display: flex; flex-direction: column; text-align: left; padding: 0; border: 1px solid var(--line);
+    border-radius: 10px; overflow: hidden; background: var(--card); color: var(--text); cursor: pointer; font: inherit;
+  }
+  .video:hover .thumb::after { transform: scale(1.08); }
+  .thumb { position: relative; aspect-ratio: 16 / 9; background: #000; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb::after {
+    content: ""; position: absolute; left: 50%; top: 50%; width: 56px; height: 40px; transform: translate(-50%, -50%);
+    background: rgba(200, 80, 30, 0.95) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='white' d='M8 5v14l11-7z'/></svg>") center/22px no-repeat;
+    border-radius: 10px; transition: transform .15s;
+  }
+  .video .meta { padding: 10px 12px 12px; }
+  .video .title { font-weight: 600; font-size: 14px; line-height: 1.35; }
+  .video .note { color: var(--muted); font-size: 12px; margin-top: 4px; }
+  .player { aspect-ratio: 16 / 9; width: 100%; border: 0; border-radius: 10px; background: #000; }
+  .empty { color: var(--muted); font-style: italic; }
+  .actions { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
+
+  footer { color: var(--muted); font-size: 13px; margin-top: 40px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1 id="title"></h1>
+    <p class="sub">Trail previews for all nine stages. Watch the trails before you ride them.</p>
+    <div class="totals" id="totals"></div>
+    <a class="btn" id="collection-link" href="#" target="_blank" rel="noopener">Open the komoot collection</a>
+  </header>
+
+  <section class="event" id="event">
+    <h3>Event videos</h3>
+    <div class="videos" id="event-videos"></div>
+  </section>
+
+  <nav class="stages" id="nav" aria-label="Stages"></nav>
+
+  <main id="stages"></main>
+
+  <footer>
+    Route data from komoot. Videos are by their respective creators on YouTube and open in the embedded player.
+    Missing a good video? <a id="repo-link" href="https://github.com/Radulovic82/trans-caledonia-2026">Add it on GitHub</a>.
+  </footer>
+</div>
+
+<script src="stages.js"></script>
+<script>
+(function () {
+  const stages = globalThis.STAGES || [];
+  const collection = globalThis.COLLECTION || { title: "Trans Caledonia 2026", url: "#", videos: [] };
+
+  function el(tag, attrs, children) {
+    const node = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) {
+      if (k === "text") node.textContent = v;
+      else if (k === "class") node.className = v;
+      else node.setAttribute(k, v);
+    }
+    for (const c of children || []) node.appendChild(c);
+    return node;
+  }
+
+  function videoTile(v) {
+    const img = el("img", { src: `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`, loading: "lazy", alt: "" });
+    const meta = el("div", { class: "meta" }, [el("div", { class: "title", text: v.title })]);
+    if (v.note) meta.appendChild(el("div", { class: "note", text: v.note }));
+    const btn = el("button", { class: "video", type: "button", "data-id": v.id, "aria-label": `Play ${v.title}` }, [
+      el("div", { class: "thumb" }, [img]), meta,
+    ]);
+    btn.addEventListener("click", () => {
+      const player = el("iframe", {
+        class: "player",
+        src: `https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0`,
+        title: v.title,
+        allow: "autoplay; fullscreen; picture-in-picture",
+        allowfullscreen: "",
+      });
+      btn.replaceWith(player);
+    });
+    return btn;
+  }
+
+  function videoGrid(videos) {
+    const grid = el("div", { class: "videos" });
+    for (const v of videos) grid.appendChild(videoTile(v));
+    return grid;
+  }
+
+  function stageCard(s) {
+    const id = "stage-" + s.day.replace(".", "-");
+    const tourUrl = `https://www.komoot.com/tour/${s.komootId}`;
+    const searchUrl = "https://www.youtube.com/results?search_query=" + encodeURIComponent(s.searchQuery);
+
+    const head = el("div", { class: "stage-head" }, [
+      el("h2", {}, [
+        el("a", { href: tourUrl, target: "_blank", rel: "noopener" }, [
+          el("span", { class: "day", text: `Day ${s.day}` }),
+          document.createTextNode(s.name),
+        ]),
+      ]),
+    ]);
+    const stats = el("p", { class: "stats", text: `${s.distanceKm} km · ${s.elevationM} m up · ${s.duration} h` });
+    const map = el("iframe", {
+      class: "map",
+      src: `https://www.komoot.com/tour/${s.komootId}/embed?profile=1`,
+      loading: "lazy",
+      title: `komoot map for Day ${s.day} ${s.name}`,
+      allowfullscreen: "",
+    });
+
+    const section = el("section", { class: "stage", id }, [head, stats, map, el("h3", { text: "Trail videos" })]);
+    if (s.videos.length) section.appendChild(videoGrid(s.videos));
+    else section.appendChild(el("p", { class: "empty", text: "No videos found yet for this stage." }));
+
+    section.appendChild(el("div", { class: "actions" }, [
+      el("a", { class: "btn ghost", href: searchUrl, target: "_blank", rel: "noopener", text: "Search YouTube for this trail" }),
+      el("a", { class: "btn ghost", href: tourUrl, target: "_blank", rel: "noopener", text: "Open on komoot" }),
+    ]));
+    return section;
+  }
+
+  // Header
+  document.getElementById("title").textContent = collection.title;
+  document.title = `${collection.title} trail previews`;
+  document.getElementById("collection-link").href = collection.url;
+  const km = stages.reduce((a, s) => a + s.distanceKm, 0);
+  const up = stages.reduce((a, s) => a + s.elevationM, 0);
+  const totals = document.getElementById("totals");
+  totals.appendChild(el("span", { class: "chip", text: `${stages.length} stages` }));
+  totals.appendChild(el("span", { class: "chip", text: `${Math.round(km)} km` }));
+  totals.appendChild(el("span", { class: "chip", text: `${up.toLocaleString("en-GB")} m climbing` }));
+
+  // Event videos
+  const eventSection = document.getElementById("event");
+  if (collection.videos && collection.videos.length) {
+    document.getElementById("event-videos").replaceWith(videoGrid(collection.videos));
+  } else {
+    eventSection.remove();
+  }
+
+  // Nav + stages
+  const nav = document.getElementById("nav");
+  const main = document.getElementById("stages");
+  for (const s of stages) {
+    nav.appendChild(el("a", { href: "#stage-" + s.day.replace(".", "-"), text: `${s.day} ${s.name}` }));
+    main.appendChild(stageCard(s));
+  }
+})();
+</script>
+</body>
+</html>
