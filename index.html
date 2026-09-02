@@ -114,6 +114,16 @@
 
   footer { color: var(--muted); font-size: 13px; margin-top: 40px; }
 
+  /* Packing checklist */
+  .packing { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px 24px; margin-top: 14px; }
+  .pack-group h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+  ul.checklist { list-style: none; margin: 0; padding: 0; }
+  ul.checklist li { margin: 0; }
+  ul.checklist label { display: flex; align-items: center; gap: 8px; padding: 4px 0; cursor: pointer; font-size: 15px; }
+  ul.checklist input { width: 17px; height: 17px; accent-color: var(--accent); margin: 0; }
+  ul.checklist label.done span { color: var(--muted); text-decoration: line-through; }
+  .linkish { background: none; border: 0; padding: 0; color: var(--text); text-decoration: underline; cursor: pointer; font: inherit; font-size: 13px; }
+
   #to-top {
     position: fixed; right: 18px; bottom: 18px; z-index: 10; width: 44px; height: 44px; border-radius: 50%;
     border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; font-size: 20px; line-height: 1;
@@ -133,7 +143,7 @@
     <div class="hero-actions">
       <a class="btn" id="collection-link" href="#" target="_blank" rel="noopener">Open the komoot collection</a>
       <a class="btn ghost" id="site-link" href="#" target="_blank" rel="noopener">trans-caledonia.com</a>
-      <a class="btn ghost" id="packing-link" href="#" target="_blank" rel="noopener">Packing checklist</a>
+      <a class="btn ghost" id="packing-link" href="#packing">Packing checklist</a>
     </div>
   </header>
 
@@ -152,8 +162,15 @@
     <details>
       <summary>Key information and mandatory kit</summary>
       <ul class="essentials" id="essentials-list"></ul>
-      <p class="small">Full details, rule book and kit list: <a href="https://www.trans-caledonia.com/event-admin-and-information" target="_blank" rel="noopener">Event Admin &amp; Information</a>.
-        <span id="packing-note"> Our own <a id="packing-link-2" href="#" target="_blank" rel="noopener">packing checklist</a> is on Google Keep.</span></p>
+      <p class="small">Full details, rule book and kit list: <a href="https://www.trans-caledonia.com/event-admin-and-information" target="_blank" rel="noopener">Event Admin &amp; Information</a>.</p>
+    </details>
+  </section>
+
+  <section class="card" id="packing">
+    <details>
+      <summary>Packing checklist</summary>
+      <p class="small" style="margin:8px 0 0">Tick things off as you pack. Ticks are saved in this browser only. <button type="button" class="linkish" id="packing-reset">Reset</button></p>
+      <div class="packing" id="packing-groups"></div>
     </details>
   </section>
 
@@ -268,10 +285,36 @@
   document.getElementById("collection-link").href = collection.url;
   const site = document.getElementById("site-link");
   if (collection.site) site.href = collection.site; else site.remove();
-  const packing = document.getElementById("packing-link");
-  const packing2 = document.getElementById("packing-link-2");
-  if (collection.packingList) { packing.href = collection.packingList; packing2.href = collection.packingList; }
-  else { packing.remove(); document.getElementById("packing-note").remove(); }
+
+  // Packing checklist with ticks remembered in localStorage
+  if (collection.packing && collection.packing.length) {
+    const KEY = "tc2026-packing";
+    let saved = {};
+    try { saved = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { saved = {}; }
+    const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} };
+    const groups = document.getElementById("packing-groups");
+    const boxes = [];
+    for (const g of collection.packing) {
+      const ul = el("ul", { class: "checklist" });
+      for (const item of g.items) {
+        const key = `${g.group}/${item}`;
+        const cb = el("input", { type: "checkbox" });
+        cb.checked = !!saved[key];
+        cb.addEventListener("change", () => { if (cb.checked) saved[key] = 1; else delete saved[key]; persist(); label.classList.toggle("done", cb.checked); });
+        const label = el("label", { class: cb.checked ? "done" : "" }, [cb, el("span", { text: item })]);
+        boxes.push({ cb, label });
+        ul.appendChild(el("li", {}, [label]));
+      }
+      groups.appendChild(el("div", { class: "pack-group" }, [el("h4", { text: g.group }), ul]));
+    }
+    document.getElementById("packing-reset").addEventListener("click", () => {
+      saved = {}; persist();
+      for (const b of boxes) { b.cb.checked = false; b.label.classList.remove("done"); }
+    });
+  } else {
+    document.getElementById("packing").remove();
+    document.getElementById("packing-link").remove();
+  }
   const km = stages.reduce((a, s) => a + s.distanceKm, 0);
   const up = stages.reduce((a, s) => a + s.elevationM, 0);
   const timedCount = stages.reduce((a, s) => a + s.timed.length, 0);
