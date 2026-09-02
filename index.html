@@ -65,8 +65,9 @@
   .videos { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
   .video {
     display: flex; flex-direction: column; text-align: left; padding: 0; border: 1px solid var(--line);
-    border-radius: 10px; overflow: hidden; background: var(--card); color: var(--text); cursor: pointer; font: inherit;
+    border-radius: 10px; overflow: hidden; background: var(--card); color: var(--text); text-decoration: none;
   }
+  .video:hover { border-color: var(--accent); }
   .video:hover .thumb::after { transform: scale(1.08); }
   .thumb { position: relative; aspect-ratio: 16 / 9; background: #000; }
   .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -78,7 +79,6 @@
   .video .meta { padding: 10px 12px 12px; }
   .video .title { font-weight: 600; font-size: 14px; line-height: 1.35; }
   .video .note { color: var(--muted); font-size: 12px; margin-top: 4px; }
-  .player { aspect-ratio: 16 / 9; width: 100%; border: 0; border-radius: 10px; background: #000; }
   .empty { color: var(--muted); font-style: italic; }
   .actions { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
 
@@ -104,7 +104,7 @@
   <main id="stages"></main>
 
   <footer>
-    Route data from komoot. Videos are by their respective creators on YouTube and open in the embedded player.
+    Route data from komoot. Videos are by their respective creators and open on YouTube in a new tab.
     Missing a good video? <a id="repo-link" href="https://github.com/Radulovic82/trans-caledonia-2026">Add it on GitHub</a>.
   </footer>
 </div>
@@ -130,20 +130,11 @@
     const img = el("img", { src: `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`, loading: "lazy", alt: "" });
     const meta = el("div", { class: "meta" }, [el("div", { class: "title", text: v.title })]);
     if (v.note) meta.appendChild(el("div", { class: "note", text: v.note }));
-    const btn = el("button", { class: "video", type: "button", "data-id": v.id, "aria-label": `Play ${v.title}` }, [
-      el("div", { class: "thumb" }, [img]), meta,
-    ]);
-    btn.addEventListener("click", () => {
-      const player = el("iframe", {
-        class: "player",
-        src: `https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0`,
-        title: v.title,
-        allow: "autoplay; fullscreen; picture-in-picture",
-        allowfullscreen: "",
-      });
-      btn.replaceWith(player);
-    });
-    return btn;
+    const link = el("a", {
+      class: "video", href: `https://www.youtube.com/watch?v=${v.id}`,
+      target: "_blank", rel: "noopener", "aria-label": `Watch ${v.title} on YouTube`,
+    }, [el("div", { class: "thumb" }, [img]), meta]);
+    return link;
   }
 
   function videoGrid(videos) {
